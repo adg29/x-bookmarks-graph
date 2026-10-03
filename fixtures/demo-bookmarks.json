@@ -1,0 +1,103 @@
+{
+  "_demo": "DEMO DATA — not real bookmarks. Synthetic rows whose only job is to exercise the ingest contract and give the explorer something to navigate locally. Every xPostId is prefixed `demo-` and every authorHandle starts with `demo_` so these can never be mistaken for captured bookmarks. Delete with: MATCH (b:Bookmark) WHERE b.xPostId STARTS WITH 'demo-' DETACH DELETE b",
+  "bookmarks": [
+    {
+      "xPostId": "demo-0001",
+      "url": "https://example.com/demo/0001",
+      "text": "DEMO: Thread on shipping a React Native screen without a native module — the Expo config plugin route, and when you still have to drop to Swift.",
+      "authorHandle": "demo_rn_dev",
+      "createdAt": "2026-08-14T16:12:00.000Z",
+      "conversationId": "demo-conv-100",
+      "folder": "RN",
+      "publicMetrics": { "like_count": 1840, "reply_count": 62, "retweet_count": 211 },
+      "source": "x",
+      "topics": ["react native", "expo", "native modules"],
+      "relatedTo": ["demo-0002"]
+    },
+    {
+      "xPostId": "demo-0002",
+      "url": "https://example.com/demo/0002",
+      "text": "DEMO: New Architecture migration notes — Fabric renderer gotchas, what broke in our bridge code, and the three libraries we had to fork.",
+      "authorHandle": "demo_rn_dev",
+      "createdAt": "2026-09-02T09:41:00.000Z",
+      "conversationId": "demo-conv-104",
+      "folder": "RN",
+      "publicMetrics": { "like_count": 930, "reply_count": 44, "retweet_count": 98 },
+      "source": "x",
+      "topics": ["react native", "new architecture", "native modules"]
+    },
+    {
+      "xPostId": "demo-0003",
+      "url": "https://example.com/demo/0003",
+      "text": "DEMO: A custom GPT that reads your repo's ADRs and refuses to answer questions the architecture docs don't cover. The refusal is the feature.",
+      "authorHandle": "demo_gpt_builder",
+      "createdAt": "2026-07-28T20:05:00.000Z",
+      "conversationId": "demo-conv-210",
+      "folder": "GPTs Custom",
+      "publicMetrics": { "like_count": 5120, "reply_count": 310, "retweet_count": 740 },
+      "source": "x",
+      "topics": ["custom gpts", "retrieval", "prompting"]
+    },
+    {
+      "xPostId": "demo-0004",
+      "url": "https://example.com/demo/0004",
+      "text": "DEMO: Spatial UI on Vision Pro — why the hover-to-focus model breaks most ported iPad layouts, with a checklist for fixing hit targets.",
+      "authorHandle": "demo_avp_designer",
+      "createdAt": "2026-06-11T13:22:00.000Z",
+      "conversationId": "demo-conv-305",
+      "folder": "AVP",
+      "publicMetrics": { "like_count": 2210, "reply_count": 87, "retweet_count": 186 },
+      "source": "x",
+      "topics": ["vision pro", "spatial ui", "visionos"]
+    },
+    {
+      "xPostId": "demo-0005",
+      "url": "https://example.com/demo/0005",
+      "text": "DEMO: Grok surfaced this one — a long reply chain arguing that agent frameworks are mostly retry loops with branding. Saved for the taxonomy in the replies.",
+      "authorHandle": "demo_ai_poster",
+      "createdAt": "2026-09-19T02:14:00.000Z",
+      "conversationId": "demo-conv-412",
+      "folder": "AIBOOM",
+      "publicMetrics": { "like_count": 8800, "reply_count": 1240, "retweet_count": 1510 },
+      "source": "grok-from-x",
+      "topics": ["agents", "ai tooling", "retrieval"],
+      "relatedTo": ["demo-0003", "demo-0006"]
+    },
+    {
+      "xPostId": "demo-0006",
+      "url": "https://example.com/demo/0006",
+      "text": "DEMO: Evaluation harness walkthrough — build the eval set before the agent, keep it in the repo, and treat a passing rate drop like a failing test.",
+      "authorHandle": "demo_ai_poster",
+      "createdAt": "2026-09-25T18:48:00.000Z",
+      "conversationId": "demo-conv-430",
+      "folder": "AIBOOM",
+      "publicMetrics": { "like_count": 3410, "reply_count": 152, "retweet_count": 402 },
+      "source": "x",
+      "topics": ["agents", "evals", "ai tooling"]
+    },
+    {
+      "xPostId": "demo-0007",
+      "url": "https://example.com/demo/0007",
+      "text": "DEMO: Free graph databases course — the modeling chapters are the valuable part; skip ahead if you already know Cypher syntax.",
+      "authorHandle": "demo_course_curator",
+      "createdAt": "2026-05-30T11:03:00.000Z",
+      "conversationId": "demo-conv-500",
+      "folder": "Courses",
+      "publicMetrics": { "like_count": 640, "reply_count": 19, "retweet_count": 74 },
+      "source": "x",
+      "topics": ["neo4j", "graph modeling", "courses"]
+    },
+    {
+      "xPostId": "demo-0008",
+      "url": "https://example.com/demo/0008",
+      "text": "DEMO: Operational excellence thread — the incident review template that stopped our postmortems from turning into blame documents.",
+      "authorHandle": "demo_opex_lead",
+      "createdAt": "2026-04-17T07:55:00.000Z",
+      "conversationId": "demo-conv-610",
+      "folder": "OPEX",
+      "publicMetrics": { "like_count": 1120, "reply_count": 58, "retweet_count": 140 },
+      "source": "x",
+      "topics": ["operational excellence", "incident review"]
+    }
+  ]
+}
