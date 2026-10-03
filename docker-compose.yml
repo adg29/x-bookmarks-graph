@@ -1,0 +1,17 @@
+# Primary local path. `npm run neo4j:up` starts this; Browser is on http://localhost:7474.
+# The password here is local-only and must match NEO4J_PASSWORD in your .env.local.
+services:
+  neo4j:
+    image: neo4j:5.26-community
+    container_name: bookmark-graph-neo4j
+    ports:
+      - "7474:7474" # HTTP / Neo4j Browser
+      - "7687:7687" # Bolt
+    environment:
+      NEO4J_AUTH: neo4j/localdevpassword
+      NEO4J_server_memory_heap_max__size: 1G
+    volumes:
+      - neo4j-data:/data
+
+volumes:
+  neo4j-data:
