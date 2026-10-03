@@ -88,6 +88,18 @@
       "topics": ["neo4j", "graph modeling", "courses"]
     },
     {
+      "xPostId": "demo-0009",
+      "url": "https://example.com/demo/0009",
+      "text": "DEMO: Expo Router file conventions cheat sheet. No relatedTo on this row on purpose — the explorer should still surface it from demo-0001 and demo-0002 by walking shared topics.",
+      "authorHandle": "demo_topic_walker",
+      "createdAt": "2026-09-29T15:30:00.000Z",
+      "conversationId": "demo-conv-120",
+      "folder": "RN",
+      "publicMetrics": { "like_count": 412, "reply_count": 11, "retweet_count": 38 },
+      "source": "x",
+      "topics": ["react native", "expo", "courses"]
+    },
+    {
       "xPostId": "demo-0008",
       "url": "https://example.com/demo/0008",
       "text": "DEMO: Operational excellence thread — the incident review template that stopped our postmortems from turning into blame documents.",

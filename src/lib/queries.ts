@@ -75,7 +75,7 @@ OPTIONAL MATCH (b)-[:ABOUT]->(t:Topic)
 WITH b, collect(DISTINCT t.name) AS topics
 RETURN ${SUMMARY_PROJECTION}
 ORDER BY b.createdAt DESC, b.xPostId DESC
-LIMIT $limit
+LIMIT toInteger($limit)
 `;
 
 const LIST_BY_SEARCH = `
@@ -85,9 +85,13 @@ OPTIONAL MATCH (b)-[:ABOUT]->(t:Topic)
 WITH b, score, collect(DISTINCT t.name) AS topics
 RETURN ${SUMMARY_PROJECTION}
 ORDER BY score DESC, b.createdAt DESC
-LIMIT $limit
+LIMIT toInteger($limit)
 `;
 
+/**
+ * `disableLosslessIntegers` makes the driver send JS numbers as Cypher floats, which
+ * `LIMIT` rejects — hence `LIMIT toInteger($limit)` in every query below.
+ */
 function filterParams(filters: ExploreFilters) {
   return {
     folder: filters.folder ?? null,
@@ -172,7 +176,7 @@ export async function getRelated(xPostId: string, limit = 12): Promise<BookmarkS
     WITH b, collect(DISTINCT t.name) AS topics
     RETURN ${SUMMARY_PROJECTION}
     ORDER BY b.createdAt DESC
-    LIMIT $limit
+    LIMIT toInteger($limit)
     `,
     { xPostId, limit },
   );
@@ -198,7 +202,7 @@ export async function getTopicNeighbours(
     WITH b, shared, collect(DISTINCT t.name) AS topics
     RETURN ${SUMMARY_PROJECTION}, shared
     ORDER BY size(shared) DESC, b.createdAt DESC
-    LIMIT $limit
+    LIMIT toInteger($limit)
     `,
     { xPostId, limit },
   );
@@ -230,7 +234,7 @@ export async function listTopics(limit = 40): Promise<Facet[]> {
     MATCH (t:Topic)<-[:ABOUT]-(b:Bookmark)
     RETURN t.name AS value, count(b) AS count
     ORDER BY count DESC, value ASC
-    LIMIT $limit
+    LIMIT toInteger($limit)
     `,
     { limit },
   );
@@ -243,7 +247,7 @@ export async function listAuthors(limit = 40): Promise<Facet[]> {
     MATCH (a:Author)<-[:BY]-(b:Bookmark)
     RETURN a.handle AS value, count(b) AS count
     ORDER BY count DESC, value ASC
-    LIMIT $limit
+    LIMIT toInteger($limit)
     `,
     { limit },
   );
