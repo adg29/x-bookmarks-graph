@@ -6,7 +6,7 @@ import { accessSecret } from "./env";
  * letting everyone in.
  *
  * Swapping in a real provider (NextAuth, Clerk, Auth0) means replacing this module and
- * `src/middleware.ts`; nothing else in the app reads the session.
+ * `src/proxy.ts`. Pages read the session only through `src/lib/session.ts`.
  */
 
 export const SESSION_COOKIE = "bkg_session";

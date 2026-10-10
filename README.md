@@ -71,7 +71,7 @@ it can't reach the graph.
 | Command | What it does |
 | --- | --- |
 | `npm run dev` | Explorer at `http://localhost:3000`. |
-| `npm run schema` | Applies constraints and indexes. Idempotent; the documented boot step. |
+| `npm run schema` | Applies constraints and indexes, and seeds `ProjectDoc` nodes if missing. Idempotent. |
 | `npm run ingest -- <file.json>` | Batch ingest. `-` reads stdin. |
 | `npm run allowlist -- add <xPostId...>` | The **only** way to set `visibility: curated`. |
 | `npm run allowlist -- remove <xPostId...>` | Back to `private`. |
@@ -165,18 +165,22 @@ Response:
 
 1. Import the repo, framework preset Next.js.
 2. Set `NEO4J_URI` (the `neo4j+s://` Aura URI), `NEO4J_USER`, `NEO4J_PASSWORD`,
-   `APP_ACCESS_SECRET`, and `INGEST_TOKEN` in Project Settings → Environment Variables.
+   `NEO4J_DATABASE` (Aura's database name is the instance id), `APP_ACCESS_SECRET`,
+   and `INGEST_TOKEN` in Project Settings → Environment Variables.
 3. Deploy, then give the X Bookmarks agent the deployment URL and `INGEST_TOKEN`.
 
 The explorer is private by default: `src/proxy.ts` redirects every route except `/login` and
-`/api/ingest` to the passphrase gate.
+`/api/ingest` to the passphrase gate. `/roadmap` and `/changelog` are the only extra
+exception, and only when that doc's `isPublic` flag is true in Neo4j. Edit paths
+(`/roadmap/edit`, `/changelog/edit`) and every bookmark route stay gated.
 
 ### Swapping in real auth
 
-v1 ships a single shared passphrase, deliberately. To replace it, change two files and
-nothing else — no page or query reads the session directly:
+v1 ships a single shared passphrase, deliberately. To replace it, change these files —
+bookmark queries never read the session:
 
 - `src/lib/auth.ts` — the session check (`isValidSession`) and the sign-in check.
+- `src/lib/session.ts` — the cookie read used by ProjectDoc pages.
 - `src/proxy.ts` — the redirect rule.
 
 A NextAuth or Clerk middleware drops straight into `src/proxy.ts`; delete `src/app/login`
@@ -189,6 +193,8 @@ v1 is complete, and these are the things it is expected to do:
 
 - `npm install && npm run typecheck && npm run lint && npm run build` pass.
 - `npm run schema` creates every constraint and index on a fresh database and is safe to re-run.
+  It also creates `ProjectDoc` nodes for `/roadmap` and `/changelog` on first run (never
+  overwrites an edited body).
 - `npm run ingest` and `POST /api/ingest` upsert the same way, idempotently, keyed on `xPostId`.
 - Re-ingesting a bookmark the allowlist promoted leaves it `curated`; ingest asking for
   `curated` is rejected.
@@ -202,3 +208,20 @@ visualization — is explicitly out of scope and listed in
 [CONTEXT.md](./CONTEXT.md#2-what-v1-deliberately-does-not-build).
 
 Verified against Neo4j 5.26 (the version in `docker-compose.yml`).
+
+## Roadmap and Changelog
+
+Two `ProjectDoc` nodes in Neo4j (`slug` is `roadmap` or `changelog`). Markdown `body`,
+`isPublic` (default `false`), and `updatedAt`. Admin edits take effect on the next request —
+no redeploy.
+
+| Route | Who |
+| --- | --- |
+| `/roadmap`, `/changelog` | Signed-in always; guests only when that doc is public |
+| `/roadmap/edit`, `/changelog/edit` | Signed-in only |
+
+To publish a doc: sign in, open Edit, check **Public**, save. Signed-in nav always shows
+both links. The login page shows a subtle link only for docs that are currently public.
+
+Guest-visible pages render only the ProjectDoc body. They do not query bookmarks, authors,
+or topics.

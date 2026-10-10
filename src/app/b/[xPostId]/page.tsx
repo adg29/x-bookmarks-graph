@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { AppShell } from "@/components/app-shell";
 import { BookmarkCard } from "@/components/bookmark-card";
 import { GraphUnreachable } from "@/components/graph-unreachable";
 import { Badge } from "@/components/ui/badge";
@@ -16,9 +17,9 @@ export default async function BookmarkPage({ params }: PageProps<"/b/[xPostId]">
   const health = await graphIsReachable();
   if (!health.ok) {
     return (
-      <main className="mx-auto w-full max-w-3xl flex-1 px-6 py-8">
+      <AppShell signedIn width="narrow">
         <GraphUnreachable error={health.error} />
-      </main>
+      </AppShell>
     );
   }
 
@@ -35,7 +36,7 @@ export default async function BookmarkPage({ params }: PageProps<"/b/[xPostId]">
     .filter((metric) => metric.value !== null);
 
   return (
-    <main className="mx-auto w-full max-w-3xl flex-1 px-6 py-8">
+    <AppShell signedIn width="narrow">
       <Link href="/" className="text-muted-foreground hover:text-foreground text-sm">
         ← All bookmarks
       </Link>
@@ -140,7 +141,7 @@ export default async function BookmarkPage({ params }: PageProps<"/b/[xPostId]">
         <Meta label="ingested" value={formatDate(bookmark.ingestedAt)} />
         <Meta label="updated" value={formatDate(bookmark.updatedAt)} />
       </dl>
-    </main>
+    </AppShell>
   );
 }
 

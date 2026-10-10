@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { AppShell } from "@/components/app-shell";
 import { BookmarkCard } from "@/components/bookmark-card";
 import { FacetList } from "@/components/facet-list";
 import { GraphUnreachable } from "@/components/graph-unreachable";
@@ -37,9 +38,9 @@ export default async function ExplorerPage({ searchParams }: PageProps<"/">) {
   const health = await graphIsReachable();
   if (!health.ok) {
     return (
-      <Shell>
+      <AppShell signedIn>
         <GraphUnreachable error={health.error} />
-      </Shell>
+      </AppShell>
     );
   }
 
@@ -90,7 +91,7 @@ export default async function ExplorerPage({ searchParams }: PageProps<"/">) {
   );
 
   return (
-    <Shell counts={counts}>
+    <AppShell signedIn counts={counts}>
       <div className="flex flex-col gap-8 lg:flex-row-reverse lg:items-start">
         <aside className="lg:sticky lg:top-6 lg:w-60 lg:shrink-0">
           <details className="lg:hidden" name="filters">
@@ -170,49 +171,7 @@ export default async function ExplorerPage({ searchParams }: PageProps<"/">) {
           )}
         </div>
       </div>
-    </Shell>
-  );
-}
-
-function Shell({
-  children,
-  counts,
-}: {
-  children: React.ReactNode;
-  counts?: { bookmarks: number; authors: number; topics: number; curated: number };
-}) {
-  return (
-    <main className="mx-auto w-full max-w-5xl flex-1 px-6 py-8">
-      <header className="mb-8 flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <Link href="/" className="font-heading text-xl font-semibold tracking-tight">
-            Bookmark Graph
-          </Link>
-          <p className="text-muted-foreground mt-1 text-sm">
-            @alangnative&apos;s X bookmarks, in Neo4j. Private.
-          </p>
-        </div>
-        {counts ? (
-          <dl className="text-muted-foreground flex gap-5 text-xs">
-            <Stat label="bookmarks" value={counts.bookmarks} />
-            <Stat label="authors" value={counts.authors} />
-            <Stat label="topics" value={counts.topics} />
-            <Stat label="curated" value={counts.curated} />
-          </dl>
-        ) : null}
-      </header>
-      {children}
-    </main>
-  );
-}
-
-function Stat({ label, value }: { label: string; value: number }) {
-  return (
-    <div>
-      <dt className="sr-only">{label}</dt>
-      <dd className="text-foreground font-mono text-base tabular-nums">{value}</dd>
-      <dd className="mt-0.5">{label}</dd>
-    </div>
+    </AppShell>
   );
 }
 

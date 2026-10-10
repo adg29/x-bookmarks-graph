@@ -1,6 +1,7 @@
 /**
- * Applies constraints and indexes. Idempotent — run it against a fresh Aura instance or
- * a local container, and re-run it after any schema change.
+ * Applies constraints and indexes, then seeds ProjectDoc nodes if they are missing.
+ * Idempotent — run it against a fresh Aura instance or a local container, and re-run
+ * it after any schema change. Existing roadmap/changelog bodies are never overwritten.
  *
  *   npm run schema
  */

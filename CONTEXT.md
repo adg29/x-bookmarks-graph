@@ -66,11 +66,12 @@ Subtracting these is the point of v1, not an oversight.
   then, not now.
 - **No Notion store or sync.** Notion is at most a personal mirror later. Neo4j is the graph.
 - **No real auth provider.** A single-secret cookie gate (`APP_ACCESS_SECRET`) keeps the
-  explorer private. Swapping in NextAuth/Clerk means replacing one module
-  (`src/lib/auth.ts`) — documented in the README.
-- **No public product.** `visibility: curated` exists as a field and an allowlist script so the
-  concept is real and enforceable, but there is no public route, no marketing site, no
-  share flow.
+  explorer private. Swapping in NextAuth/Clerk means replacing `src/lib/auth.ts`,
+  `src/lib/session.ts`, and `src/proxy.ts` — documented in the README.
+- **No public bookmark product.** `visibility: curated` exists as a field and an allowlist script so the
+  concept is real and enforceable, but there is no public bookmark route, no marketing site, no
+  share flow. The only optional public pages are `ProjectDoc` nodes (`/roadmap`, `/changelog`),
+  which never include bookmark or graph data.
 - **No graph visualization.** The explorer is a list, a detail page, and links. Navigating
   edges by clicking is the whole feature. No canvas, no force layout, no D3.
 - **No embeddings / vector index / LLM enrichment.** Search is a Neo4j full-text index over
@@ -84,8 +85,9 @@ Subtracting these is the point of v1, not an oversight.
 Three pieces, in dependency order:
 
 1. **Schema** — `npm run schema` applies constraints and indexes (idempotent, safe to re-run).
-   Uniqueness on `Bookmark.xPostId`, `Author.handle`, `Topic.name`; range indexes on
+   Uniqueness on `Bookmark.xPostId`, `Author.handle`, `Topic.name`, `ProjectDoc.slug`; range indexes on
    `folder`, `visibility`, `createdAt`, `source`; a full-text index on `Bookmark.text`.
+   It also MERGEs the `roadmap` and `changelog` ProjectDoc nodes with seed copy on first run.
 2. **Ingest** — one contract, two entrypoints over the same function
    (`ingestBookmarks()` in `src/lib/ingest.ts`):
    - `npm run ingest -- <file.json>` for local/batch use.
@@ -95,6 +97,8 @@ Three pieces, in dependency order:
    - `/` — listing with search, folder filter, source filter.
    - `/b/[xPostId]` — detail: full text, metrics, author, topics, related bookmarks.
    - `/author/[handle]`, `/topic/[name]`, `/folder/[folder]` — navigation driven by the edges.
+   - `/roadmap`, `/changelog` — ProjectDoc pages. Admin (session cookie) can edit markdown and
+     toggle `isPublic`. Guests may read a doc only when that flag is true; bookmark routes stay gated.
 
 Everything else is explicitly later.
 

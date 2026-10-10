@@ -1,12 +1,15 @@
 import { cookies } from "next/headers";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { SESSION_COOKIE, isGateConfigured, passphraseMatches, sessionToken } from "@/lib/auth";
+import { listPublicProjectDocLinks } from "@/lib/project-docs";
 
 const SESSION_MAX_AGE = 60 * 60 * 24 * 30;
 
+export const dynamic = "force-dynamic";
 export const metadata = { title: "Sign in — Bookmark Graph" };
 
 async function signIn(formData: FormData) {
@@ -38,6 +41,7 @@ export default async function LoginPage({ searchParams }: PageProps<"/login">) {
   const next = typeof params.next === "string" ? params.next : "/";
   const error = typeof params.error === "string" ? params.error : null;
   const configured = isGateConfigured();
+  const publicDocs = await listPublicProjectDocLinks();
 
   return (
     <main className="mx-auto flex w-full max-w-sm flex-1 flex-col justify-center px-6 py-16">
@@ -78,6 +82,19 @@ export default async function LoginPage({ searchParams }: PageProps<"/login">) {
           </p>
         </div>
       )}
+
+      {publicDocs.length > 0 ? (
+        <p className="text-muted-foreground mt-10 text-center text-xs">
+          {publicDocs.map((doc, index) => (
+            <span key={doc.slug}>
+              {index > 0 ? <span aria-hidden> · </span> : null}
+              <Link href={`/${doc.slug}`} className="hover:text-foreground underline-offset-4 hover:underline">
+                {doc.title}
+              </Link>
+            </span>
+          ))}
+        </p>
+      ) : null}
     </main>
   );
 }
