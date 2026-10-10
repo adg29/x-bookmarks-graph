@@ -3,9 +3,7 @@
  * repo or that the project has already recorded — no invented metrics or dates.
  */
 
-export const CHANGELOG_SEED = `# Changelog
-
-What this repo has actually shipped. Dated entries match git history on \`main\`.
+export const CHANGELOG_SEED = `What this repo has actually shipped. Dated entries match git history on \`main\`.
 
 ## 2026-10-03 — Schema and ingest contract
 
@@ -28,9 +26,7 @@ What this repo has actually shipped. Dated entries match git history on \`main\`
 - \`/api/ingest\` stays on its own bearer token so the agent can post without a browser session.
 `;
 
-export const ROADMAP_SEED = `# Roadmap
-
-Next work — not claimed as done.
+export const ROADMAP_SEED = `Next work — not claimed as done.
 
 ## GitHub → Vercel reconnect
 
